@@ -31,7 +31,9 @@ let categorySchema = object({
 
 type Category = InferType<typeof categorySchema>;
 
-const validate = async (data: Category):Promise<Object> => {
+
+// validate was initially Promise<Object> but I changed it to any
+const validate = async (data: Category):Promise<any> => {
 	try {
 		return await categorySchema.validate(data, { abortEarly: false });
 	} catch (error) {
@@ -79,6 +81,13 @@ interface FormErrors{
 	icon?: string;
 };
 
+interface FormErrorsList {
+	errors: {
+		"key": string;
+		"field": string;
+		"message": string;
+	}[];
+}
 export default function AddCategoryForm() {
 	const dispatch = useDispatch()
 	const [validationErrors, setValidationErrors] = useState<FormErrors>({
@@ -144,10 +153,11 @@ export default function AddCategoryForm() {
 		event.preventDefault();
 		const result = validate(formData).then((result)=> {
 			if (result instanceof Error) {
-				console.log('hello')
 				const findError = function(errors: any, key: string) {
 					return errors.find((error: any) => error.key === key)?.message || '';
 				}
+				const resultList = result as FormErrorsList;
+
 				setValidationErrors({
 					title: findError(result.errors, "title"),
 					timeframes: {
