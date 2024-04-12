@@ -3,6 +3,7 @@ const icons: string[] = ["Suitcase", "Controller", "Book", "Runner", "Speech Bub
 interface DropdownProps {
 	value: string;
 	onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+	error: string;
 }
 
 export default function IconDropdown({ value, onChange, error }: DropdownProps) {

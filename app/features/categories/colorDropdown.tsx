@@ -3,7 +3,7 @@ const colors: string[] = ["tomato red", "blue", "cherry red", "green", "purple",
 interface DropdownProps {
 	value: string;
 	onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-	error: object;
+	error: string;
 }
 
 export default function ColorDropdown({ value, onChange, error }: DropdownProps) {
