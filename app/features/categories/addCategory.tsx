@@ -32,8 +32,7 @@ let categorySchema = object({
 type Category = InferType<typeof categorySchema>;
 
 
-// validate was initially Promise<Object> but I changed it to any
-const validate = async (data: Category):Promise<any> => {
+const validate = async (data: Category):Promise<Object> => {
 	try {
 		return await categorySchema.validate(data, { abortEarly: false });
 	} catch (error) {
@@ -156,26 +155,26 @@ export default function AddCategoryForm() {
 				const findError = function(errors: any, key: string) {
 					return errors.find((error: any) => error.key === key)?.message || '';
 				}
-				const resultList = result as FormErrorsList;
+				const resultList = result as unknown as FormErrorsList; // ? why do I need to do this?
 
 				setValidationErrors({
-					title: findError(result.errors, "title"),
+					title: findError(resultList.errors, "title"),
 					timeframes: {
 						daily: {
-							current: findError(result.errors, "timeframes.daily.current"),
-							previous: findError(result.errors, "timeframes.daily.previous")
+							current: findError(resultList.errors, "timeframes.daily.current"),
+							previous: findError(resultList.errors, "timeframes.daily.previous")
 						},
 						weekly: {
-							current: findError(result.errors, "timeframes.weekly.current"),
-							previous: findError(result.errors, "timeframes.weekly.previous")
+							current: findError(resultList.errors, "timeframes.weekly.current"),
+							previous: findError(resultList.errors, "timeframes.weekly.previous")
 						},
 						monthly: {
-							current: findError(result.errors, "timeframes.monthly.current"),
-							previous: findError(result.errors, "timeframes.monthly.previous")
+							current: findError(resultList.errors, "timeframes.monthly.current"),
+							previous: findError(resultList.errors, "timeframes.monthly.previous")
 						}
 					},
-					color: findError(result.errors, "color"),
-					icon: findError(result.errors, "icon")
+					color: findError(resultList.errors, "color"),
+					icon: findError(resultList.errors, "icon")
 				});
 			} else {
 				setValidationErrors({
